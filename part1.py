@@ -11,84 +11,83 @@ DO NOT MODIFY EXISTING FUNCTION SIGNATURES.
 DO NOT IMPORT ADDITIONAL LIBRARIES.
 DOING SO MAY CAUSE YOUR CODE TO FAIL AUTOMATED TESTING.
 """
-
 import torch
 
-class rnn(torch.nn.Module):
+# Simple addition operation
 
-    def __init__(self):
-        super(rnn, self).__init__()
-
-        self.ih = torch.nn.Linear(64, 128)
-        self.hh = torch.nn.Linear(128, 128)
-
-    def rnnCell(self, input, hidden):
-        """
-        TODO: Using only the above defined linear layers and a tanh
-              activation, create an Elman RNN cell.  You do not need
-              to include an output layer.  The network should take
-              some input (inputDim = 64) and the current hidden state
-              (hiddenDim = 128), and return the new hidden state.
-        """
-        input = input.view(input.shape[0], -1)
-        input = self.ih(input)
-
-        hidden = hidden.view(hidden.shape[0], -1)
-        hidden = self.hh(hidden)
-
-        tanh = torch.nn.Tanh()
-        new_hidden = tanh(input + hidden)
-
-        return new_hidden
-
-    def forward(self, input):
-        hidden = torch.zeros(128)
-        """
-        TODO: Using self.rnnCell, create a model that takes as input
-              a sequence of size [seqLength, batchSize, inputDim]
-              and passes each input through the rnn sequentially,
-              updating the (initally zero) hidden state.
-              Return the final hidden state after the
-              last input in the sequence has been processed.
-        """
-        for new_input in input:
-          hidden = self.rnnCell(new_input, hidden)
-
-        return hidden
-
-class rnnSimplified(torch.nn.Module):
-
-    def __init__(self):
-        super(rnnSimplified, self).__init__()
-        """
-        TODO: Define self.net using a single PyTorch module such that
-              the network defined by this class is equivalent to the
-              one defined in class "rnn".
-        """
-        self.net = torch.nn.RNN(64, 128)
-
-    def forward(self, input):
-        _, hidden = self.net(input)
-
-        return hidden
-
-def lstm(input, hiddenSize):
+def simple_addition(x, y):
     """
-    TODO: Let variable lstm be an instance of torch.nn.LSTM.
-          Variable input is of size [batchSize, seqLength, inputDim]
+    TODO: Implement a simple addition function that accepts two tensors and returns the result.
     """
-    #input = input.permute(1, 0, 2)
-    lstm = torch.nn.LSTM(input.size()[2], hiddenSize, 1, True, True)
+    return torch.add(x, y)
 
-    return lstm(input)
 
-def conv(input, weight):
+# Resize tensors
+# Use view() to implement the following functions ( flatten() and reshape() are not allowed )
+
+def simple_reshape(x, shape):
     """
-    TODO: Return the convolution of input and weight tensors,
-          where input contains sequential data.
-          The convolution should be along the sequence axis.
-          input is of size [batchSize, inputDim, seqLength]
+    TODO: Implement a function that reshapes the given tensor as the given shape and returns the result.
     """
-    output = torch.nn.functional.conv1d(input, weight)
+    return x.view(shape)
 
-    return output
+
+def simple_flat(x):
+    """
+    TODO: Implement a function that flattens the given tensor and returns the result.
+    """
+    return x.view(-1)
+
+# Transpose and Permutation
+
+def simple_transpose(x):
+    """
+    TODO: Implement a function that swaps the first dimension and
+        the second dimension of the given matrix x and returns the result.
+    """
+    return torch.t(x)
+
+def simple_permute(x, order):
+    """
+    TODO: Implement a function that permute the dimensions of the given tensor
+        x according to the given order and returns the result.
+    """
+    return x.permute(order)
+
+# Matrix multiplication (with broadcasting).
+
+def simple_dot_product(x, y):
+    """
+    TODO: Implement a function that computes the dot product of
+        two rank 1 tensors and returns the result.
+    """
+    return torch.dot(x, y)
+
+def simple_matrix_mul(x, y):
+    """
+    TODO: Implement a function that performs a matrix multiplication
+        of two given rank 2 tensors and returns the result.
+    """
+    return torch.matmul(x, y)
+
+def broadcastable_matrix_mul(x, y):
+    """
+    TODO: Implement a function that computes the matrix product of two tensors and returns the result.
+        The function needs to be broadcastable.
+    """
+    return torch.matmul(x, y)
+
+# Concatenate and stack.
+def simple_concatenate(tensors):
+    """
+    TODO: Implement a function that concatenates the given sequence of tensors
+        in the first dimension and returns the result
+    """
+    return torch.cat(tensors)
+
+def simple_stack(tensors, dim):
+    """
+    TODO: Implement a function that concatenates the given sequence of tensors
+        along a new dimension(dim) and returns the result.
+    """
+    return torch.stack(tensors, dim)
